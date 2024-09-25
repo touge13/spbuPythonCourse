@@ -187,7 +187,7 @@ class Matrix:
             If the shapes of the matrices are not the same.
         """
         if self.matrix.shape != other.matrix.shape:
-            raise ValueError("Matrices must have the same shape for addition.")
+            raise ValueError("Matrices must have the same shape for addition")
         return Matrix((self.matrix + other.matrix).tolist())
 
     def __matmul__(self, other: "Matrix") -> "Matrix":
