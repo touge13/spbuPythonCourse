@@ -2,10 +2,17 @@
 
 name: Check code style
 
-# Controls when the workflow will run
+# # Controls when the workflow will run
+# on:
+#   # Triggers the workflow on push or pull request events
+#   [ push, pull_request ]
 on:
-  # Triggers the workflow on push or pull request events
-  [ push, pull_request ]
+  push:
+    branches:
+      - '**'  # Запускать на всех ветках
+  pull_request:
+    branches:
+      - '**'  # Запускать для всех PR на всех ветках
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
