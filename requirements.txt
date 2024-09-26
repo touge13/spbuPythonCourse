@@ -1,5 +1,5 @@
 black
-mypy
+mypy==1.11.2
 numpy
 pre-commit
 pytest
