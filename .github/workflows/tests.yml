@@ -27,4 +27,4 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/project
         run: |
-          pytest --maxfail=5 --disable-war
+          pytest --maxfail=5 --disable-warnings
