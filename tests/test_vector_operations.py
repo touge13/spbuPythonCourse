@@ -42,9 +42,7 @@ def test_vector_angle():
     v1 = Vector([1, 0])
     v2 = Vector([0, 1])
     angle = v1 ^ v2
-    assert (
-        abs(angle - (pi / 2)) < 1e-7
-    ), f"Expected angle pi/2, got {angle}"
+    assert abs(angle - (pi / 2)) < 1e-7, f"Expected angle pi/2, got {angle}"
 
 
 def test_zero_vector_norm():
