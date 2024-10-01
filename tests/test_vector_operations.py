@@ -6,6 +6,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import pytest
 from project.vector_operations import Vector
 
+from math import pi
+
 # Fixtures
 @pytest.fixture
 def vector1():
@@ -41,8 +43,8 @@ def test_vector_angle():
     v2 = Vector([0, 1])
     angle = v1 ^ v2
     assert (
-        abs(angle - (3.141592653589793 / 2)) < 1e-7
-    ), f"Expected angle π/2, got {angle}"
+        abs(angle - (pi / 2)) < 1e-7
+    ), f"Expected angle pi/2, got {angle}"
 
 
 def test_zero_vector_norm():
