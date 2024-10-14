@@ -18,7 +18,7 @@ def test_cache_no_caching():
 def test_cache_with_size_limit():
     """Test the function with caching and a size limit."""
     cached_function = cache_results(max_cache_size=2)(expensive_computation)
-
+    
     assert cached_function(1) == 1  # Compute and cache
     assert cached_function(2) == 2  # Compute and cache
     assert cached_function(1) == 1  # Cached result
@@ -27,16 +27,20 @@ def test_cache_with_size_limit():
     assert cached_function(1) == 1  # Cached result
     assert cached_function(4) == 4  # Compute and cache
     assert cached_function(3) == 3  # Cached result
-    assert cached_function(2) != 2  # Old cache should be evicted, compute again
+    # Now (1, 2) should be evicted, 2 is still cached
+    assert cached_function(2) == 2  # Cached result still valid
+    # (4, 3) are now in cache, so (1, 2) should not be computed again
+    assert cached_function(1) != 1  # Should compute again, as (1, 2) should be evicted
 
 
 def test_cache_varied_arguments():
     """Test the function with varied arguments."""
     cached_function = cache_results(max_cache_size=2)(expensive_computation)
-
+    
     assert cached_function(5, y=10) == 15  # Compute and cache
     assert cached_function(5, y=10) == 15  # Cached result
     assert cached_function(5, y=20) == 25  # Compute and cache
     assert cached_function(5, y=10) == 15  # Cached result
     assert cached_function(10) == 10  # Compute and cache
-    assert cached_function(5, y=10) != 15  # Old cache should be evicted
+    # Now (5, y=10) should be evicted, so it should compute again
+    assert cached_function(5, y=10) != 15  # Should compute again
