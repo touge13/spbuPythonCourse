@@ -1,14 +1,19 @@
 import inspect
 import random
 
+
 class Evaluated:
     """Class to indicate that the default value of a function argument should be evaluated when called."""
+
     def __init__(self, func):
         self.func = func
 
+
 class Isolated:
     """Class to indicate that the default value of a function argument should be a deep copy."""
+
     pass
+
 
 def smart_args(positional_support=False):
     """
@@ -24,6 +29,7 @@ def smart_args(positional_support=False):
         ValueError: If a required argument is not provided, if Isolated and Evaluated are used together,
                      or if positional arguments are provided when disabled.
     """
+
     def decorator(func):
         """Wraps the original function to modify its argument handling."""
         # Get the signature of the function to analyze parameters
@@ -34,8 +40,10 @@ def smart_args(positional_support=False):
             """Handles the argument processing and invokes the original function."""
             # Check for positional arguments if not supported
             if not positional_support:
-                assert len(args) == 0, "Positional arguments are not allowed. Use named arguments."
-            
+                assert (
+                    len(args) == 0
+                ), "Positional arguments are not allowed. Use named arguments."
+
             # Create a new dictionary for the default argument values
             new_kwargs = {}
 
@@ -52,9 +60,9 @@ def smart_args(positional_support=False):
                     # Handle default values
                     if isinstance(param.default, Evaluated):
                         # Ensure Evaluated and Isolated are not used together
-                        assert not isinstance(param.default.func, Isolated), (
-                            f"Cannot use Evaluated and Isolated together for argument '{name}'."
-                        )
+                        assert not isinstance(
+                            param.default.func, Isolated
+                        ), f"Cannot use Evaluated and Isolated together for argument '{name}'."
                         # Compute the value if Evaluated is used
                         new_kwargs[name] = param.default.func()
                     elif isinstance(param.default, Isolated):
@@ -68,7 +76,7 @@ def smart_args(positional_support=False):
                     else:
                         # Simply take the default value
                         new_kwargs[name] = param.default
-            
+
             # Call the original function with the new values
             return func(*args, **new_kwargs)
 
@@ -76,21 +84,25 @@ def smart_args(positional_support=False):
 
     return decorator
 
+
 # Examples of using the smart_args decorator
 @smart_args()
 def check_isolation(*, d=Isolated()):
     """Check isolation by modifying a dictionary passed as an argument."""
-    d['a'] = 0
+    d["a"] = 0
     return d
+
 
 def get_random_number():
     """Generates a random number between 0 and 100."""
     return random.randint(0, 100)
 
+
 @smart_args()
 def check_evaluation(*, x=get_random_number(), y=Evaluated(get_random_number)):
     """Check the evaluation of default values."""
     print(x, y)
+
 
 # Example with positional arguments enabled
 @smart_args(positional_support=True)
