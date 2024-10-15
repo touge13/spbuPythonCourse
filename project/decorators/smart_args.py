@@ -1,136 +1,139 @@
-import inspect
-import random
 import copy
+import inspect
 
 
 class Evaluated:
-    """Class to indicate that the default value of a function argument should be evaluated when called."""
+    """Wrapper for evaluated default values. Expects a callable function."""
 
     def __init__(self, func):
+        assert callable(func), "Evaluated expects a callable"
         self.func = func
 
 
 class Isolated:
-    """Class to indicate that the default value of a function argument should be a deep copy."""
+    """Placeholder for isolated default values that should be deeply copied."""
 
     pass
 
 
-def smart_args(positional_support=False):
-    """Decorator to handle default argument values in a smart way.
-
-    This decorator allows functions to define default argument values that can
-    be evaluated or deep-copied when the function is called. It also provides
-    an option to allow or disallow positional arguments.
+def smart_args(allow_positional=False):
+    """
+    Decorator to handle 'Evaluated' and 'Isolated' argument defaults.
 
     Args:
-        positional_support (bool): If True, allows positional arguments; otherwise, only keyword arguments are allowed.
+    allow_positional (bool): If True, positional arguments are allowed.
+                             Otherwise, only keyword arguments are supported.
 
-    Returns:
-        function: The decorated function with enhanced argument handling.
+    This decorator processes arguments with specific behavior:
+    - Evaluated(func): A default value that is evaluated at the time of function call.
+    - Isolated(): A placeholder that requires deep copying of the passed argument.
+
+    Raises:
+    - AssertionError: If both Evaluated and Isolated are used together.
+    - AssertionError: If positional arguments are used while disabled.
     """
 
     def decorator(func):
-        """Wraps the original function to modify its argument handling."""
-        # Get the signature of the function to analyze parameters
-        signature = inspect.signature(func)
-        parameters = signature.parameters
+        """
+        Decorator function that wraps the original function to handle
+        'Evaluated' and 'Isolated' argument defaults.
+
+        Args:
+            func (callable): The function to be wrapped.
+
+        Returns:
+            callable: A wrapper function that processes the arguments before
+                    calling the original function.
+        """
 
         def wrapper(*args, **kwargs):
-            """Handles the argument processing and invokes the original function."""
-            # Check for positional arguments if not supported
-            if not positional_support:
-                assert (
-                    len(args) == 0
-                ), "Positional arguments are not allowed. Use named arguments."
+            """
+            Wrapper function that processes arguments for the decorated function,
+            handling special cases for 'Evaluated' and 'Isolated' argument defaults.
 
-            # Create a new dictionary for the default argument values
-            new_kwargs = {}
-            for i, (name, param) in enumerate(parameters.items()):
-                if i < len(args):
-                    # If a positional argument is provided, use it
-                    new_kwargs[name] = args[i]
-                elif name in kwargs:
-                    # If the argument is explicitly passed, use it
-                    new_kwargs[name] = kwargs[name]
-                elif param.default is param.empty:
-                    raise ValueError(f"Argument '{name}' is required but not provided.")
-                else:
-                    # Check for the combination of Evaluated and Isolated
-                    if isinstance(param.default, Evaluated) and isinstance(
-                        param.default.func, Isolated
-                    ):
-                        raise ValueError(
-                            f"Argument '{name}' cannot have both Evaluated and Isolated as default."
-                        )
+            Args:
+                *args: Positional arguments passed to the original function.
+                **kwargs: Keyword arguments passed to the original function.
 
-                    if isinstance(param.default, Evaluated):
-                        new_kwargs[name] = param.default.func()
-                    elif isinstance(param.default, Isolated):
-                        assert (
-                            len(args) <= i
-                        ), f"Argument '{name}' must be provided as a keyword argument."
-                        new_kwargs[name] = copy.deepcopy(kwargs.get(name, {}))
-                    else:
-                        # Simply take the default value
-                        new_kwargs[name] = param.default
+            Raises:
+                AssertionError: If positional arguments are provided when not allowed.
+                AssertionError: If both 'Evaluated' and 'Isolated' are used for the same argument.
+                IndexError: If more positional arguments are provided than expected.
 
-            return func(**new_kwargs)
+            Returns:
+                The result of the original function after processing the arguments.
+            """
+            # Fetch full argument specification
+            full_argspec = inspect.getfullargspec(func)
+            defaults = full_argspec.defaults or ()
+            kwonly_defaults = full_argspec.kwonlydefaults or {}
+            positional_args = full_argspec.args or []
+            pos_defaults_offset = len(positional_args) - len(defaults)
+
+            # Check if positional arguments are allowed
+            if not allow_positional:
+                assert len(args) == 0, "Only keyword arguments are allowed"
+
+            # Process named arguments
+            bound_args = kwargs.copy()
+
+            # Apply positional arguments (if allowed)
+            for i, arg_value in enumerate(args):
+                arg_name = positional_args[i]
+                bound_args[arg_name] = arg_value
+
+            # Handle default values for positional arguments
+            for i, arg_name in enumerate(positional_args[pos_defaults_offset:]):
+                if arg_name not in bound_args:
+                    bound_args[arg_name] = defaults[i]
+
+            # Handle keyword-only arguments and apply defaults if necessary
+            for kwarg_name, default_value in kwonly_defaults.items():
+                if kwarg_name not in bound_args:
+                    bound_args[kwarg_name] = default_value
+
+            # Process Evaluated and Isolated
+            for name, value in bound_args.items():
+                if isinstance(value, Evaluated):
+                    bound_args[name] = value.func()  # Evaluate function
+                elif isinstance(value, Isolated):
+                    # Deep copy only if it's a dict
+                    bound_args[name] = copy.deepcopy(kwargs.get(name, {}))  # Deep copy
+
+            # Check for incorrect combination of Evaluated and Isolated
+            for name, value in bound_args.items():
+                assert not (
+                    isinstance(value, Evaluated) and isinstance(value, Isolated)
+                ), f"Cannot combine Evaluated and Isolated for argument {name}"
+
+            return func(**bound_args)
 
         return wrapper
 
     return decorator
 
 
-# Examples of using the smart_args decorator
-@smart_args()
-def check_isolation(*, d=Isolated()):
-    """Check isolation by modifying a dictionary passed as an argument.
-
-    Args:
-        d (dict): A dictionary that will be modified. Default is an isolated copy.
-
-    Returns:
-        dict: The modified dictionary.
-    """
-    d["a"] = 0
-    return d
+# Example usage
+import random
 
 
 def get_random_number():
-    """Generates a random number between 0 and 100.
-
-    Returns:
-        int: A random number between 0 and 100.
-    """
+    """Function to generate a random number between 0 and 100."""
     random.seed(0)
     return random.randint(0, 100)
 
 
-@smart_args()
+@smart_args(allow_positional=False)
 def check_evaluation(*, x=get_random_number(), y=Evaluated(get_random_number)):
-    """Check the evaluation of default values.
-
-    Args:
-        x (int): A random number generated by default.
-        y (int): A value that is evaluated when the function is called.
-
-    Returns:
-        tuple: The values of x and y.
-    """
-    return x, y  # Return the values for testing
+    """Prints x and y values with Evaluated handling for 'y'."""
+    print(x, y)
 
 
-# Example with positional arguments enabled
-@smart_args(positional_support=True)
-def example_with_positional(a=1, b=2):
-    """An example function that accepts positional arguments.
+no_mutable = {"a": 10}
 
-    Args:
-        a (int): The first positional argument. Default is 1.
-        b (int): The second positional argument. Default is 2.
 
-    Returns:
-        int: The sum of a and b.
-    """
-    return a + b
+@smart_args()
+def check_isolation(*, d=Isolated()):
+    """Modifies the dictionary passed by making a deep copy using Isolated."""
+    d["a"] = 0
+    return d
