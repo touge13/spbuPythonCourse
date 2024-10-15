@@ -3,7 +3,6 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-import pytest
 from project.decorators.smart_args import (
     smart_args,
     Evaluated,
