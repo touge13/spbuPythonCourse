@@ -11,8 +11,6 @@ from project.decorators.smart_args import (
     get_random_number,
 )
 
-import pytest
-
 
 def test_evaluated():
     """Test Evaluated handling in the function."""
