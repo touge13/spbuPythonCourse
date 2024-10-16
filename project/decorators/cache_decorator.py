@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from functools import wraps
 
+
 def cache_results(max_cache_size=0):
     """Decorator to cache function results.
 
@@ -11,7 +12,7 @@ def cache_results(max_cache_size=0):
     Returns:
         function: The wrapped function with caching behavior.
     """
-    
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -19,10 +20,12 @@ def cache_results(max_cache_size=0):
             key = (args, frozenset(kwargs.items()))
 
             # Initialize cache if it doesn't exist
-            if not hasattr(wrapper, 'cache'):
-                wrapper.cache = OrderedDict()  # Using OrderedDict to maintain insertion order
-            
-            if not hasattr(wrapper, 'calls'):
+            if not hasattr(wrapper, "cache"):
+                wrapper.cache = (
+                    OrderedDict()
+                )  # Using OrderedDict to maintain insertion order
+
+            if not hasattr(wrapper, "calls"):
                 wrapper.calls = 0  # Initialize call counter on the wrapper
 
             # Check if the result is already in the cache

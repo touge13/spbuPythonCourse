@@ -12,13 +12,14 @@ class Evaluated:
 
 class Isolated:
     """Placeholder for isolated default values that should be deeply copied."""
+
     pass
 
 
 def smart_args(allow_positional=False):
     """
     Decorator to handle 'Evaluated' and 'Isolated' argument defaults.
-    
+
     Args:
     allow_positional (bool): If True, positional arguments are allowed.
                              Otherwise, only keyword arguments are supported.
@@ -89,18 +90,25 @@ def smart_args(allow_positional=False):
                 elif isinstance(value, Isolated):
                     # Ensure the value is provided, raise if not
                     if name not in kwargs and name not in bound_args:
-                        raise ValueError(f"Argument '{name}' requires a value for Isolated")
+                        raise ValueError(
+                            f"Argument '{name}' requires a value for Isolated"
+                        )
                     # Deep copy the value if it was provided
-                    bound_args[name] = copy.deepcopy(kwargs[name]) if name in kwargs else {}
+                    bound_args[name] = (
+                        copy.deepcopy(kwargs[name]) if name in kwargs else {}
+                    )
 
             # Check for incorrect combination of Evaluated and Isolated
             for name in bound_args:
-                if isinstance(bound_args[name], Evaluated) and isinstance(bound_args[name], Isolated):
-                    raise ValueError(f"Cannot combine Evaluated and Isolated for argument '{name}'")
+                if isinstance(bound_args[name], Evaluated) and isinstance(
+                    bound_args[name], Isolated
+                ):
+                    raise ValueError(
+                        f"Cannot combine Evaluated and Isolated for argument '{name}'"
+                    )
 
             return func(**bound_args)
 
         return wrapper
 
     return decorator
-

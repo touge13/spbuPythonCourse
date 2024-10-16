@@ -21,11 +21,13 @@ def expensive_computation(x, y=0):
     print(f"Computing result for ({x}, {y})")
     return x + y
 
+
 # Example usage of the decorator on built-in functions
 @cache_results(max_cache_size=3)
 def cached_sum(*args):
     """Calculates the sum of the provided arguments."""
     return sum(args)
+
 
 @cache_results(max_cache_size=3)
 def cached_max(*args):
@@ -176,6 +178,7 @@ def test_cached_max_no_caching():
 
     assert cached_max(3, 4) == 4  # New arguments, should compute again
     assert cached_max.calls == 2  # Should be called a second time
+
 
 def test_cached_max_with_size_limit():
     """Test the cached_max function with caching and a size limit."""

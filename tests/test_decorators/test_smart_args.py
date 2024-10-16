@@ -4,8 +4,10 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from project.decorators.smart_args import smart_args, Evaluated, Isolated
+
 # Example usage
 import random
+
 
 def get_random_number():
     """Function to generate a random number between 0 and 100."""
@@ -27,6 +29,7 @@ def check_isolation(*, d=Isolated()):
     """Modifies the dictionary passed by making a deep copy using Isolated."""
     d["a"] = 0
     return d
+
 
 # Tests
 def test_evaluated():
@@ -101,6 +104,7 @@ def test_evaluated_with_positional_argument():
     result = test_func(10)  # Positional argument passed
     assert result == 10  # Positional argument should take precedence
 
+
 def test_mixed_arguments_with_evaluated():
     """Test that using positional and keyword arguments with Evaluated works as expected."""
 
@@ -110,6 +114,7 @@ def test_mixed_arguments_with_evaluated():
 
     result = test_func(1)  # Using positional argument
     assert result == (1, 0)  # Should return positional argument and default for y
+
 
 def test_evaluated_called_each_time():
     """Test that Evaluated calls the function every time it's evaluated."""
@@ -136,6 +141,7 @@ def test_evaluated_called_each_time():
     assert result3 == 3
     assert called_count == 3  # Ensure it was called three times
 
+
 def test_isolated_returns_deep_copy():
     """Test that Isolated returns a deep copy of the argument."""
 
@@ -146,11 +152,11 @@ def test_isolated_returns_deep_copy():
         return d
 
     result = test_func()
-    
+
     # Ensure it is a new dictionary (deep copy)
     assert result is not original_dict  # Check they are different objects
     assert result == {}  # Check content is the same, should be empty by default
-    
+
     # Modify the returned dictionary to ensure it is isolated
     result["a"] = 20
     assert result["a"] == 20  # Check if the modification is successful
@@ -165,12 +171,12 @@ def test_isolated_deep_copy_with_multiple_args():
         return a, b
 
     result_a, result_b = test_func()
-    
+
     # Ensure each is a new dictionary (deep copy)
     assert result_a is not result_b  # They should be different objects
     assert result_a == {}
     assert result_b == {}
-    
+
     # Modify one of the returned dictionaries
     result_a["x"] = 5
     assert result_a["x"] == 5

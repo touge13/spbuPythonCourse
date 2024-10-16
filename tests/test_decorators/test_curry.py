@@ -38,6 +38,7 @@ def test_curry_proper_usage():
     assert f(1)(2)(3) == "1 2 3"
     assert f(1)(2)(0) == "1 2 0"
 
+
 def test_curry_preserve_arity():
     # Define a function with multiple arguments
     original_function = lambda a, b, c, d: a + b + c + d
@@ -45,23 +46,22 @@ def test_curry_preserve_arity():
 
     with pytest.raises(TypeError):
         curried_function(1)(2)(3)(4)(5)
-        curried_function(1)(2) 
+        curried_function(1)(2)
 
     # Ensure the curried function works as expected
     assert curried_function(1)(2)(3)(4) == 10  # Full application
-    assert curried_function(1)(1)(1)(1) == 4   # All arguments are 1
+    assert curried_function(1)(1)(1)(1) == 4  # All arguments are 1
     assert curried_function(1)(2)(3)(-1) == 5  # Mix of positive and negative
 
     # Test partial applications with remaining arguments
-    assert curried_function(1)(2)(3)(0) == 6   # Full application with last arg as 0
+    assert curried_function(1)(2)(3)(0) == 6  # Full application with last arg as 0
     assert curried_function(1)(2)(-1)(0) == 2  # Full application with mixed args
 
     # Additional test for partial application
     partial_application = curried_function(1)(2)
-    assert partial_application(3)(4) == 10      # Checking for correct subsequent calls
-    assert partial_application(-1)(-1) == 1      # Mix of positive and negative
+    assert partial_application(3)(4) == 10  # Checking for correct subsequent calls
+    assert partial_application(-1)(-1) == 1  # Mix of positive and negative
 
-    
 
 def test_curry_with_builtin_functions():
     # Test with the built-in max function

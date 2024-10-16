@@ -20,7 +20,9 @@ def curry_explicit(function, arity):
     def curried(arg):
         if curried.remaining_arity == 1:
             return function(arg)
-        return curry_explicit(lambda *args: function(arg, *args), curried.remaining_arity - 1)
+        return curry_explicit(
+            lambda *args: function(arg, *args), curried.remaining_arity - 1
+        )
 
     curried.remaining_arity = arity
     return curried
