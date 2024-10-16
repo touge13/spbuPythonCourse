@@ -5,7 +5,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pytest
 import numpy as np
-from project.matrix_operations import Matrix
+from project.vector_matrix_operations.matrix_operations import Matrix
 
 # Fixtures
 @pytest.fixture
