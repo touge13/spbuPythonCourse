@@ -7,6 +7,7 @@ from project.decorators.smart_args import smart_args, Evaluated, Isolated
 
 # Example usage
 import random
+import pytest
 
 
 def get_random_number():
@@ -50,7 +51,7 @@ def test_isolated():
     def test_func(*, d=Isolated()):
         return d
 
-    result = test_func()
+    result = test_func(d={})  # Передаем пустой словарь явно
     assert isinstance(result, dict)  # Should return a new dictionary
     assert result == {}  # Initial value of the dictionary should be empty
 
@@ -59,7 +60,7 @@ def test_isolated():
     assert result["a"] == 1  # Check if the modification is successful
 
     # Call the function again to ensure isolation
-    result2 = test_func()
+    result2 = test_func(d={})  # Передаем пустой словарь снова
     assert result2 == {}  # Should return a new, separate dictionary
 
 
@@ -70,7 +71,7 @@ def test_isolated_and_evaluated_in_combination():
     def test_func(*, d=Isolated(), y=Evaluated(lambda: 0)):
         return d, y
 
-    assert test_func()
+    assert test_func(d={}, y=0)  # Передаем значения явно
 
 
 def test_isolated_with_positional_argument():
@@ -81,7 +82,7 @@ def test_isolated_with_positional_argument():
         return d
 
     # Test default behavior without arguments
-    result_default = test_func()
+    result_default = test_func(d={})  # Передаем пустой словарь явно
     assert isinstance(result_default, dict)  # Should return a new dictionary
     assert result_default == {}  # Initial value of the dictionary should be empty
 
@@ -90,7 +91,7 @@ def test_isolated_with_positional_argument():
     assert result_default["a"] == 1  # Check if the modification is successful
 
     # Call the function again to ensure isolation
-    result_new = test_func()
+    result_new = test_func(d={})  # Передаем пустой словарь снова
     assert result_new == {}  # Should return a new, separate dictionary
 
 
@@ -151,7 +152,7 @@ def test_isolated_returns_deep_copy():
     def test_func(*, d=Isolated()):
         return d
 
-    result = test_func()
+    result = test_func(d={})  # Передаем пустой словарь явно
 
     # Ensure it is a new dictionary (deep copy)
     assert result is not original_dict  # Check they are different objects
@@ -170,7 +171,7 @@ def test_isolated_deep_copy_with_multiple_args():
     def test_func(*, a=Isolated(), b=Isolated()):
         return a, b
 
-    result_a, result_b = test_func()
+    result_a, result_b = test_func(a={}, b={})  # Передаем два пустых словаря явно
 
     # Ensure each is a new dictionary (deep copy)
     assert result_a is not result_b  # They should be different objects
@@ -181,3 +182,14 @@ def test_isolated_deep_copy_with_multiple_args():
     result_a["x"] = 5
     assert result_a["x"] == 5
     assert result_b.get("x") is None  # The other should remain unchanged
+
+
+def test_isolated_without_value():
+    """Test that ValueError is raised if Isolated argument is not provided."""
+
+    @smart_args()
+    def test_func(*, d=Isolated()):
+        return d
+
+    with pytest.raises(ValueError, match="Argument 'd' requires a value for Isolated"):
+        test_func()  # Не передаем значение для 'd', должно быть исключение

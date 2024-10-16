@@ -88,15 +88,13 @@ def smart_args(allow_positional=False):
                 if isinstance(value, Evaluated):
                     bound_args[name] = value.func()  # Evaluate function
                 elif isinstance(value, Isolated):
-                    # Ensure the value is provided, raise if not
-                    if name not in kwargs and name not in bound_args:
+                    # Ensure the value is provided in kwargs (not in bound_args)
+                    if name not in kwargs:
                         raise ValueError(
                             f"Argument '{name}' requires a value for Isolated"
                         )
                     # Deep copy the value if it was provided
-                    bound_args[name] = (
-                        copy.deepcopy(kwargs[name]) if name in kwargs else {}
-                    )
+                    bound_args[name] = copy.deepcopy(kwargs[name])
 
             # Check for incorrect combination of Evaluated and Isolated
             for name in bound_args:
