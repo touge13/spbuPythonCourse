@@ -11,18 +11,16 @@ def curry_explicit(function, arity):
 
     Raises:
     ValueError -- If arity is negative.
-    TypeError -- If more arguments are provided than the arity allows.
     """
     if arity < 0:
         raise ValueError("Arity cannot be negative")
     if arity == 0:
         return lambda: function()
 
-    def curried(*args):
-        if len(args) > arity:
-            raise TypeError(f"Expected {arity} arguments, but got {len(args)}")
-        if len(args) == arity:
-            return function(*args)
-        return lambda *new_args: curried(*(args + new_args))
+    def curried(arg):
+        if curried.remaining_arity == 1:
+            return function(arg)
+        return curry_explicit(lambda *args: function(arg, *args), curried.remaining_arity - 1)
 
+    curried.remaining_arity = arity
     return curried
