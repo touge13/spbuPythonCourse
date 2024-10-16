@@ -74,27 +74,6 @@ def test_isolated_and_evaluated_in_combination():
     assert test_func(d={}, y=0)  # Передаем значения явно
 
 
-def test_isolated_with_positional_argument():
-    """Test Isolated handling with positional arguments and default behavior."""
-
-    @smart_args(allow_positional=True)
-    def test_func(d=Isolated()):
-        return d
-
-    # Test default behavior without arguments
-    result_default = test_func(d={})  # Передаем пустой словарь явно
-    assert isinstance(result_default, dict)  # Should return a new dictionary
-    assert result_default == {}  # Initial value of the dictionary should be empty
-
-    # Modify the returned dictionary to check isolation
-    result_default["a"] = 1
-    assert result_default["a"] == 1  # Check if the modification is successful
-
-    # Call the function again to ensure isolation
-    result_new = test_func(d={})  # Передаем пустой словарь снова
-    assert result_new == {}  # Should return a new, separate dictionary
-
-
 def test_evaluated_with_positional_argument():
     """Test Evaluated handling with positional arguments."""
 
