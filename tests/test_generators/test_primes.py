@@ -4,16 +4,19 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 import pytest
-from project.generators.primes import get_kth_prime
+from project.generators.primes import get_kth_prime, prime_generator
 
 # Тест для простых чисел
-@pytest.mark.parametrize("k, expected", [
-    (1, 2),
-    (2, 3),
-    (3, 5),
-    (4, 7),
-    (5, 11),
-])
+@pytest.mark.parametrize(
+    "k, expected",
+    [
+        (1, 2),
+        (2, 3),
+        (3, 5),
+        (4, 7),
+        (5, 11),
+    ],
+)
 def test_get_kth_prime(k, expected):
     assert get_kth_prime(k) == expected
 
@@ -25,8 +28,9 @@ def test_get_kth_prime_invalid_k(k):
         get_kth_prime(k)
 
 
-def test_prime_generator_first_primes(prime_gen):
+def test_prime_generator_first_primes():
     """Test if the first few prime numbers are generated correctly."""
+    prime_gen = prime_generator()
     assert next(prime_gen) == 2
     assert next(prime_gen) == 3
     assert next(prime_gen) == 5

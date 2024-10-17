@@ -7,6 +7,7 @@ def prime_generator():
             yield num
         num += 1
 
+
 def prime_decorator(func):
     def wrapper(k):
         if k < 1:
@@ -16,7 +17,9 @@ def prime_decorator(func):
         for _ in range(k):
             prime = next(gen)
         return func(prime)
+
     return wrapper
+
 
 @prime_decorator
 def get_kth_prime(prime):

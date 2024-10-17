@@ -7,13 +7,17 @@ import pytest
 from project.generators.rgba import get_rgba_element, rgba_generator
 
 # Тест для RGBA
-@pytest.mark.parametrize("i, expected", [
-    (0, (0, 0, 0, 0)),
-    (1, (0, 0, 0, 2)),
-    (1020, (0, 0, 4, 0)),
-])
+@pytest.mark.parametrize(
+    "i, expected",
+    [
+        (0, (0, 0, 0, 0)),
+        (1, (0, 0, 0, 2)),
+        (1020, (0, 0, 20, 0)),
+    ],
+)
 def test_get_rgba_element(i, expected):
     assert get_rgba_element(i) == expected
+
 
 def test_rgba_generator_first_colors():
     gen = rgba_generator()

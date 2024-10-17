@@ -7,6 +7,7 @@ def rgba_generator():
         for a in range(0, 101, 2)
     )
 
+
 def get_rgba_element(i):
     for idx, rgba in enumerate(rgba_generator()):
         if idx == i:
