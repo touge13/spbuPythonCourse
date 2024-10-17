@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 import pytest
 from project.generators.primes import get_kth_prime, prime_generator
 
-# Тест для простых чисел
+# Prime Number Test
 @pytest.mark.parametrize(
     "k, expected",
     [
@@ -21,7 +21,7 @@ def test_get_kth_prime(k, expected):
     assert get_kth_prime(k) == expected
 
 
-# Тест на исключение при k < 1
+# Exclusion test for k < 1
 @pytest.mark.parametrize("k", [-1, 0])
 def test_get_kth_prime_invalid_k(k):
     with pytest.raises(ValueError, match="k must be greater than or equal to 1"):
