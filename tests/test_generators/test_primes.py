@@ -24,7 +24,7 @@ def test_get_kth_prime(k, expected):
 # Тест на исключение при k < 1
 @pytest.mark.parametrize("k", [-1, 0])
 def test_get_kth_prime_invalid_k(k):
-    with pytest.raises(ValueError, match="k должно быть больше или равно 1"):
+    with pytest.raises(ValueError, match="k must be greater than or equal to 1"):
         get_kth_prime(k)
 
 
