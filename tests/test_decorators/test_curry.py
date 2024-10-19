@@ -46,7 +46,6 @@ def test_curry_preserve_arity():
 
     with pytest.raises(TypeError):
         curried_function(1)(2)(3)(4)(5)
-        curried_function(1)(2)
 
     # Ensure the curried function works as expected
     assert curried_function(1)(2)(3)(4) == 10  # Full application

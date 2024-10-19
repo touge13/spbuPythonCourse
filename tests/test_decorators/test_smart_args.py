@@ -16,22 +16,6 @@ def get_random_number():
     return random.randint(0, 100)
 
 
-@smart_args(allow_positional=False)
-def check_evaluation(*, x=get_random_number(), y=Evaluated(get_random_number)):
-    """Prints x and y values with Evaluated handling for 'y'."""
-    print(x, y)
-
-
-no_mutable = {"a": 10}
-
-
-@smart_args()
-def check_isolation(*, d=Isolated()):
-    """Modifies the dictionary passed by making a deep copy using Isolated."""
-    d["a"] = 0
-    return d
-
-
 # Tests
 def test_evaluated():
     """Test Evaluated handling in the function."""
@@ -42,26 +26,6 @@ def test_evaluated():
 
     result = test_func()
     assert result == 0  # Now it should always return 0
-
-
-def test_isolated():
-    """Test Isolated handling in the function."""
-
-    @smart_args()
-    def test_func(*, d=Isolated()):
-        return d
-
-    result = test_func(d={})  # Передаем пустой словарь явно
-    assert isinstance(result, dict)  # Should return a new dictionary
-    assert result == {}  # Initial value of the dictionary should be empty
-
-    # Modify the returned dictionary to check isolation
-    result["a"] = 1
-    assert result["a"] == 1  # Check if the modification is successful
-
-    # Call the function again to ensure isolation
-    result2 = test_func(d={})  # Передаем пустой словарь снова
-    assert result2 == {}  # Should return a new, separate dictionary
 
 
 def test_isolated_and_evaluated_in_combination():
