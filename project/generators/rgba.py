@@ -1,4 +1,7 @@
-def rgba_generator():
+from typing import Generator, Tuple
+
+
+def rgba_generator() -> Generator[Tuple[int, int, int, int], None, None]:
     """
     Generator expression for producing a four-dimensional RGBA vector set.
 
@@ -19,7 +22,7 @@ def rgba_generator():
     )
 
 
-def get_rgba_element(i):
+def get_rgba_element(i: int) -> Tuple[int, int, int, int]:
     """
     Function to retrieve the i-th RGBA element from the generator.
 
