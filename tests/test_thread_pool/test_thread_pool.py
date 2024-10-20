@@ -13,11 +13,13 @@ def example_task(x, results):
     time.sleep(1)  # Simulating task execution
     results.append(x)
 
+
 def test_num_threads():
     pool = ThreadPool(3)
     # Check if the pool has the correct number of threads
     assert len(pool.threads) == 3, f"Expected 3 threads, but got {len(pool.threads)}"
     pool.dispose()
+
 
 def test_thread_disposal():
     pool = ThreadPool(3)
@@ -37,6 +39,7 @@ def test_thread_disposal():
     # Verify that the tasks have been completed
     assert len(results) == 3, "Not all tasks finished after dispose"
 
+
 def test_enqueue_and_execute():
     pool = ThreadPool(3)
     results = []
@@ -52,8 +55,18 @@ def test_enqueue_and_execute():
     end_time = time.time()
 
     # Ensure the tasks were executed in parallel (execution time should ideally be around 2 seconds, but allow up to 3 seconds due to potential delays)
-    assert sorted(results) == [0, 1, 2, 3, 4, 5], "Tasks did not execute in the expected order"
-    assert end_time - start_time < 3, "Tasks were not executed in parallel (execution took too long)"
+    assert sorted(results) == [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+    ], "Tasks did not execute in the expected order"
+    assert (
+        end_time - start_time < 3
+    ), "Tasks were not executed in parallel (execution took too long)"
+
 
 @pytest.mark.parametrize(
     "expected_sum, list_of_sets",

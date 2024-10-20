@@ -2,6 +2,7 @@ import concurrent.futures
 import itertools
 from typing import List
 
+
 def cartesian_product_sum(sets: List[List[int]]) -> int:
     """
     Calculate the sum of all elements in the Cartesian product of the provided sets.
@@ -16,6 +17,7 @@ def cartesian_product_sum(sets: List[List[int]]) -> int:
     product = list(itertools.product(*sets))
     # Sum the elements of all the Cartesian products
     return sum(sum(pair) for pair in product)
+
 
 def parallel_cartesian_sum(sets: List[List[int]]) -> int:
     """

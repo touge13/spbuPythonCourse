@@ -1,6 +1,7 @@
 import threading
 from typing import Callable, Any, Tuple
 
+
 class ThreadPool:
     """
     A simple thread pool implementation to manage and execute tasks concurrently.
@@ -22,11 +23,15 @@ class ThreadPool:
             num_threads (int): Number of threads in the pool.
         """
         self.num_threads: int = num_threads
-        self.tasks: list[Tuple[Callable, Tuple[Any, ...], dict[str, Any]]] = []  # Queue of tasks (task, args, kwargs)
+        self.tasks: list[
+            Tuple[Callable, Tuple[Any, ...], dict[str, Any]]
+        ] = []  # Queue of tasks (task, args, kwargs)
         self.threads: list[threading.Thread] = []  # List of threads
         self.shutdown_flag: bool = False  # Flag to indicate shutdown
         self.lock: threading.Lock = threading.Lock()  # Lock for thread synchronization
-        self.task_available: threading.Condition = threading.Condition(self.lock)  # Condition variable
+        self.task_available: threading.Condition = threading.Condition(
+            self.lock
+        )  # Condition variable
 
         # Start threads
         for _ in range(num_threads):
@@ -80,4 +85,3 @@ class ThreadPool:
         # Wait for all threads to finish their work
         for thread in self.threads:
             thread.join()
-
