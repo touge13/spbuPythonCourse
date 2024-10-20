@@ -14,7 +14,8 @@ def rgba_generator():
         for r in range(256)
         for g in range(256)
         for b in range(256)
-        for a in range(0, 101, 2)
+        for a in range(101)
+        if a % 2 == 0  # Only include even values for alpha
     )
 
 

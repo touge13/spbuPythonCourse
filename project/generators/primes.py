@@ -1,56 +1,68 @@
-def prime_generator():
-    """
-    Generator function to yield an infinite sequence of prime numbers.
+from typing import Callable, Generator
 
-    The function keeps track of all primes found so far and uses them
-    to check if the next number is prime. If a number is not divisible
-    by any of the previously found primes, it is considered a prime.
 
-    Yields:
-        int: The next prime number in the sequence.
+def prime_generator() -> Generator[int, None, None]:
     """
-    primes = []
+    A generator that yields prime numbers indefinitely.
+    """
     num = 2
     while True:
-        if all(num % p != 0 for p in primes):
-            primes.append(num)
+        is_prime = True
+        for i in range(2, int(num**0.5) + 1):
+            if num % i == 0:
+                is_prime = False
+                break
+        if is_prime:
             yield num
         num += 1
 
 
-def prime_decorator(func):
-    """
-    Decorator to retrieve the k-th prime number from the prime generator.
+# Initialize the global prime generator once
+prime_gen = prime_generator()
 
-    This decorator wraps a function to get the k-th prime number by
-    generating primes one by one until the k-th prime is reached.
+
+def prime_decorator(func: Callable[[int], int]) -> Callable[[int], int]:
+    """
+    A decorator that wraps a function to return the k-th prime number.
 
     Args:
-        func (function): The function to wrap that will receive the k-th prime number.
+        func (Callable[[int], int]): A function that takes an integer (prime)
+                                      and returns an integer (the prime).
 
     Returns:
-        function: A wrapper function that takes an integer k and returns the k-th prime number.
-    """
+        Callable[[int], int]: A wrapped function that returns the k-th prime number.
 
-    def wrapper(k):
+    Raises:
+        ValueError: If k is less than 1.
+    """
+    current_prime_index = 0  # Track the index of the next prime to be generated
+
+    def wrapper(k: int) -> int:
+        nonlocal current_prime_index
+
         if k < 1:
             raise ValueError("k must be greater than or equal to 1")
-        gen = prime_generator()
-        prime = None
-        for _ in range(k):
-            prime = next(gen)
+
+        # If the requested prime is greater than the last generated, continue
+        # where we left off
+        if k > current_prime_index:
+            # Skip to the correct prime number
+            for _ in range(k - current_prime_index):
+                prime = next(prime_gen)
+            current_prime_index = k  # Update the current prime index
+
         return func(prime)
 
     return wrapper
 
 
 @prime_decorator
-def get_kth_prime(prime):
+def get_kth_prime(prime: int) -> int:
     """
     Function to return the k-th prime number.
 
     Args:
-        prime (int): The k-th prime number passed by the decorator.
+        prime (int): The k-th prime number, provided by the decorator.
 
     Returns:
         int: The k-th prime number.
