@@ -32,6 +32,4 @@ def get_rgba_element(i: int) -> Tuple[int, int, int, int]:
     Returns:
         tuple: The (R, G, B, A) values at the i-th position in the generator.
     """
-    for idx, rgba in enumerate(rgba_generator()):
-        if idx == i:
-            return rgba
+    return next(rgba for idx, rgba in enumerate(rgba_generator()) if idx == i)
