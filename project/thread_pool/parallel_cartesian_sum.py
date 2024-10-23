@@ -1,22 +1,19 @@
-import concurrent.futures
+from concurrent.futures import ProcessPoolExecutor
 import itertools
 from typing import List
 
 
-def cartesian_product_sum(sets: List[List[int]]) -> int:
+def product_sum(pair: tuple) -> int:
     """
-    Calculate the sum of all elements in the Cartesian product of the provided sets.
+    Calculate the sum of elements in a single pair of Cartesian product.
 
     Args:
-        sets (List[List[int]]): A list of sets (each set is represented as a list of integers).
+        pair (tuple): A tuple representing a single element in the Cartesian product.
 
     Returns:
-        int: The sum of all elements in the Cartesian product.
+        int: The sum of elements in the tuple.
     """
-    # Compute the full Cartesian product of all sets
-    product = list(itertools.product(*sets))
-    # Sum the elements of all the Cartesian products
-    return sum(sum(pair) for pair in product)
+    return sum(pair)
 
 
 def parallel_cartesian_sum(sets: List[List[int]]) -> int:
@@ -29,10 +26,13 @@ def parallel_cartesian_sum(sets: List[List[int]]) -> int:
     Returns:
         int: The sum of all elements in the Cartesian product.
     """
-    # Use ThreadPoolExecutor for parallel processing
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        # Submit the task to calculate the Cartesian product sum
-        future = executor.submit(cartesian_product_sum, sets)
-        # Get the result from the future object
-        result = future.result()
-    return result
+    # Compute the full Cartesian product of all sets
+    product = list(itertools.product(*sets))
+
+    # Use ProcessPoolExecutor for parallel processing
+    with ProcessPoolExecutor() as executor:
+        # Map the product_sum function to each element in the Cartesian product
+        partial_sum = list(executor.map(product_sum, product))
+
+    # Sum all the partial sums
+    return sum(partial_sum)

@@ -7,6 +7,7 @@ from project.thread_pool.thread_pool import ThreadPool
 from project.thread_pool.parallel_cartesian_sum import parallel_cartesian_sum
 import time
 import pytest
+import threading
 
 # Example task
 def example_task(x, results):
@@ -16,8 +17,11 @@ def example_task(x, results):
 
 def test_num_threads():
     pool = ThreadPool(3)
-    # Check if the pool has the correct number of threads
-    assert len(pool.threads) == 3, f"Expected 3 threads, but got {len(pool.threads)}"
+    # Check if the active thread count is as expected (including the main thread)
+    expected_active_threads = 3 + 1  # +1 for the main thread
+    assert (
+        threading.active_count() == expected_active_threads
+    ), f"Expected {expected_active_threads} active threads, but got {threading.active_count()}"
     pool.dispose()
 
 

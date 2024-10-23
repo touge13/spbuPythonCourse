@@ -54,8 +54,12 @@ class ThreadPool:
                 if self.shutdown_flag and not self.tasks:
                     break
 
-                # Pop the next task from the queue
-                task, args, kwargs = self.tasks.pop(0)
+            # Safely pop the next task from the queue using the lock
+            with self.lock:
+                if self.tasks:
+                    task, args, kwargs = self.tasks.pop(0)
+                else:
+                    continue  # If the task queue is empty, skip to the next iteration
 
             # Execute the task
             task(*args, **kwargs)
