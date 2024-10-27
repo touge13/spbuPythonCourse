@@ -1,0 +1,23 @@
+
+--- Round 1 ---
+Bot1 draws 7 of Clubs
+Bot2 draws 2 of Hearts
+Bot3 draws 10 of Diamonds
+
+Current game state:
+Bot1 (ConservativeBot) score: 7 | Hand: [7 of Clubs]
+Bot2 (AggressiveBot) score: 2 | Hand: [2 of Hearts]
+Bot3 (MixedBot) score: 10 | Hand: [10 of Diamonds]
+
+
+--- Round 2 ---
+Bot1 draws 4 of Spades
+Bot2 draws 10 of Hearts
+Bot3 draws 9 of Clubs
+
+Current game state:
+Bot1 (ConservativeBot) score: 11 | Hand: [7 of Clubs, 4 of Spades]
+Bot2 (AggressiveBot) score: 12 | Hand: [2 of Hearts, 10 of Hearts]
+Bot3 (MixedBot) score: 19 | Hand: [10 of Diamonds, 9 of Clubs]
+
+Game over: Bot1 wins with 11 points!
