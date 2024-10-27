@@ -1,23 +1,111 @@
 
 --- Round 1 ---
-Bot1 draws 7 of Clubs
-Bot2 draws 2 of Hearts
-Bot3 draws 10 of Diamonds
+Bot1 draws 9 of Diamonds
+Bot2 draws 10 of Diamonds
+Bot3 draws 5 of Clubs
 
 Current game state:
-Bot1 (ConservativeBot) score: 7 | Hand: [7 of Clubs]
-Bot2 (AggressiveBot) score: 2 | Hand: [2 of Hearts]
-Bot3 (MixedBot) score: 10 | Hand: [10 of Diamonds]
+Bot1 (ConservativeBot) score: 9 | Hand: [9 of Diamonds]
+Bot2 (AggressiveBot) score: 10 | Hand: [10 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
 
 
 --- Round 2 ---
-Bot1 draws 4 of Spades
-Bot2 draws 10 of Hearts
-Bot3 draws 9 of Clubs
+Bot1 draws 5 of Hearts
+Bot2 draws 3 of Spades
+Bot3 stays with score 5
 
 Current game state:
-Bot1 (ConservativeBot) score: 11 | Hand: [7 of Clubs, 4 of Spades]
-Bot2 (AggressiveBot) score: 12 | Hand: [2 of Hearts, 10 of Hearts]
-Bot3 (MixedBot) score: 19 | Hand: [10 of Diamonds, 9 of Clubs]
+Bot1 (ConservativeBot) score: 14 | Hand: [9 of Diamonds, 5 of Hearts]
+Bot2 (AggressiveBot) score: 13 | Hand: [10 of Diamonds, 3 of Spades]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
 
-Game over: Bot1 wins with 11 points!
+
+--- Round 3 ---
+Bot1 draws 6 of Hearts
+Bot2 draws 12 of Diamonds
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 4 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 5 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 6 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 7 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 8 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 9 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+
+--- Round 10 ---
+Bot1 stays with score 20
+Bot2 stays with score 23 (bust)
+Bot3 stays with score 5
+
+Current game state:
+Bot1 (ConservativeBot) score: 20 | Hand: [9 of Diamonds, 5 of Hearts, 6 of Hearts]
+Bot2 (AggressiveBot) score: 23 | Hand: [10 of Diamonds, 3 of Spades, 12 of Diamonds]
+Bot3 (MixedBot) score: 5 | Hand: [5 of Clubs]
+
+Game over: Bot1 wins with a score of 20!
