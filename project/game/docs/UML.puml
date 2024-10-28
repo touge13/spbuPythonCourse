@@ -1,0 +1,82 @@
+@startuml
+
+class BotMeta <<metaclass>> {
+    +__new__(cls, name: str, bases: tuple, attrs: dict) : type
+}
+
+class Bot {
+    -name : str
+    -hand : List[Card]
+    -is_active : bool
+    +__init__(name: str) : None
+    +add_card(card: Card) : None
+    +calculate_score() : int
+    +reset_hand() : None
+}
+
+class ConservativeBot {
+    +strategy : str = "conservative"
+}
+
+class AggressiveBot {
+    +strategy : str = "aggressive"
+}
+
+class MixedBot {
+    +strategy : str = "mixed"
+}
+
+class Card {
+    -suit : str
+    -rank : int
+    -value : int
+    +__init__(suit: str, rank: int) : None
+    +__repr__() : str
+}
+
+class Deck {
+    -suits : List[str]
+    -ranks : List[int]
+    -cards : List[Card]
+    +__init__() : None
+    +draw_card() : Optional[Card]
+}
+
+class GameMeta <<metaclass>> {
+    +__new__(cls, name: str, bases: tuple, attrs: dict) : type
+}
+
+class Game {
+    -deck : Deck
+    -bots : List[Bot]
+    -max_steps : int
+    -current_step : int
+    -output_file : Optional[str]
+    -target_score : int
+    +__init__(bots: List[Bot], max_steps: int = 10, output_file: Optional[str] = None, target_score: Optional[int] = None) : None
+    +log(message: str) : None
+    +show_state() : None
+    +play_round() : None
+    +determine_winner() : Optional[Bot]
+    +play_game() : None
+}
+
+object main {
+    +main(output_file: Optional[str] = None) : None
+}
+
+BotMeta <|.. Bot
+Bot <|-- ConservativeBot
+Bot <|-- AggressiveBot
+Bot <|-- MixedBot
+Deck --> Card
+GameMeta <|.. Game
+Game --> Deck
+Game --> Bot
+
+main ..> ConservativeBot : "creates"
+main ..> AggressiveBot : "creates"
+main ..> MixedBot : "creates"
+main ..> Game : "creates"
+
+@enduml

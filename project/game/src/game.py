@@ -88,22 +88,26 @@ class Game(metaclass=GameMeta):
 
     def play_round(self) -> None:
         """
-        Plays a single round of the game, allowing each bot to draw cards or stay.
+        Plays a single round of the game, allowing each active bot to draw cards or stay.
         """
         self.log(f"\n--- Round {self.current_step + 1} ---")
         for bot in self.bots:
-            if bot.calculate_score() < self.target_score:  # Check score
-                if bot.decide():
-                    card = self.deck.draw_card()
-                    if card:
-                        bot.add_card(card)
-                        self.log(f"{bot.name} draws {card}")
+            if bot.is_active:  # Only active bots can take actions
+                if bot.calculate_score() < self.target_score:
+                    if bot.decide():
+                        card = self.deck.draw_card()
+                        if card:
+                            bot.add_card(card)
+                            self.log(f"{bot.name} draws {card}")
+                        else:
+                            self.log("Deck is empty!")
                     else:
-                        self.log("Deck is empty!")
+                        self.log(f"{bot.name} stays with score {bot.calculate_score()}")
                 else:
-                    self.log(f"{bot.name} stays with score {bot.calculate_score()}")
-            else:
-                self.log(f"{bot.name} stays with score {bot.calculate_score()} (bust)")
+                    bot.is_active = False  # Bot is deactivated if score exceeds target
+                    self.log(
+                        f"{bot.name} stays with score {bot.calculate_score()} (bust)"
+                    )
         self.show_state()
 
     def determine_winner(self) -> Optional[Bot]:
@@ -133,9 +137,7 @@ class Game(metaclass=GameMeta):
         return winner
 
     def play_game(self) -> None:
-        """
-        Plays the game for the maximum number of steps or until a winner is found.
-        """
+        """Plays the game for the maximum number of steps or until a winner is found."""
         if self.output_file:
             open(
                 self.output_file, "w"
@@ -145,19 +147,28 @@ class Game(metaclass=GameMeta):
             self.play_round()
             self.current_step += 1
 
+            # Check for active bots after each round
+            active_bots = [bot for bot in self.bots if bot.is_active]
+
+            # Check if there is only one active bot left
+            if len(active_bots) == 1:
+                winner = active_bots[0]
+                self.log(f"Game over: {winner.name} wins as the last remaining bot!")
+                return  # End the game
+
             # Check for a winner (reaching target score)
-            if any(bot.calculate_score() == self.target_score for bot in self.bots):
-                winner = [
+            if any(bot.calculate_score() == self.target_score for bot in active_bots):
+                winner = next(
                     bot
-                    for bot in self.bots
+                    for bot in active_bots
                     if bot.calculate_score() == self.target_score
-                ][0]
+                )
                 self.log(
                     f"Game over: {winner.name} wins with {self.target_score} points!"
                 )
                 return  # End the game
 
-        # Check for a winner after all rounds are over
+        # Determine the winner after all rounds are over
         winner = self.determine_winner()
         if winner:
             self.log(

@@ -27,6 +27,9 @@ class BotMeta(type):
             attrs["decide"] = lambda self: self.calculate_score() < 19
         elif strategy == "mixed":
             attrs["decide"] = lambda self: self.calculate_score() % 2 == 0
+        elif strategy == "balanced":
+            attrs["decide"] = lambda self: self.calculate_score() < 17
+
         return super().__new__(cls, name, bases, attrs)
 
 
@@ -42,6 +45,7 @@ class Bot(metaclass=BotMeta):
         """
         self.name = name
         self.hand: List["Card"] = []  # List of cards in the bot's hand
+        self.is_active = True
 
     def add_card(self, card: "Card") -> None:
         """

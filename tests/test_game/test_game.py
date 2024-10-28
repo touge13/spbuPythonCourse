@@ -5,7 +5,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 import pytest
 from project.game.src.game import Game
-from project.game.src.bot import ConservativeBot, AggressiveBot, MixedBot
+from project.game.src.bot import Bot, ConservativeBot, AggressiveBot, MixedBot
 from project.game.src.card import Card, Deck
 
 
@@ -130,3 +130,67 @@ def test_game_initialization():
     game = Game(bots=bots, max_steps=10)
     assert game.bots == bots
     assert game.max_steps == 10
+
+
+@pytest.fixture
+def example_bots():
+    return [ConservativeBot("Bot1"), AggressiveBot("Bot2"), MixedBot("Bot3")]
+
+
+def test_game_target_score_change(example_bots):
+    """
+    Test that changing target_score for Game results in the attribute being set correctly.
+    """
+    new_target_score = 25
+    game = Game(example_bots, max_steps=10, target_score=new_target_score)
+    assert (
+        game.target_score == new_target_score
+    ), "target_score should match the new value"
+
+
+def test_game_default_target_score(example_bots):
+    """
+    Test that Game defaults to target_score of 21 if no value is provided.
+    """
+    game = Game(example_bots, max_steps=10)
+    assert game.target_score == 21, "Default target_score should be 21"
+
+
+def test_bot_strategy_metaclass():
+    """
+    Test that BotMeta metaclass assigns decide method based on strategy.
+    """
+
+    class BalancedBot(Bot):
+        """Bot that uses a balanced strategy."""
+
+        strategy = "balanced"
+
+    # Instantiate a BalancedBot and test that it has the expected decide method.
+    balanced_bot = BalancedBot("BalancedBot")
+    assert balanced_bot.strategy == "balanced", "The strategy should be 'balanced'"
+    # Verify that the 'decide' method works based on custom logic for 'balanced' strategy
+    balanced_bot.hand = [Card("Hearts", 5), Card("Diamonds", 5)]
+    assert balanced_bot.decide() == (
+        balanced_bot.calculate_score() < 17
+    ), "Balanced strategy should draw if score < 17"
+
+
+@pytest.mark.parametrize(
+    "bot_class, strategy, expected_decision",
+    [
+        (ConservativeBot, "conservative", lambda score: score < 16),
+        (AggressiveBot, "aggressive", lambda score: score < 19),
+        (MixedBot, "mixed", lambda score: score % 2 == 0),
+    ],
+)
+def test_bot_decide_methods(bot_class, strategy, expected_decision):
+    """
+    Test that bots' decide methods follow the correct strategy rules.
+    """
+    bot = bot_class("TestBot")
+    bot.hand = [Card("Hearts", 5), Card("Diamonds", 5)]
+    assert bot.strategy == strategy, f"The strategy should be {strategy}"
+    assert bot.decide() == expected_decision(
+        bot.calculate_score()
+    ), f"Decide method for {strategy} strategy should match expected behavior"
