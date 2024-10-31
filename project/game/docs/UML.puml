@@ -5,13 +5,28 @@ class BotMeta <<metaclass>> {
 }
 
 class Bot {
-    -name : str
-    -hand : List[Card]
-    -is_active : bool
-    +__init__(name: str) : None
-    +add_card(card: Card) : None
-    +calculate_score() : int
-    +reset_hand() : None
+    -_name : str
+    -_hand : Hand
+    -_balance : float
+    -_is_active : bool
+    -_current_bet : float
+    -_bet : Bet
+    +__init__(name: str, bet_amount: float = 0.0) : None
+    -_place_bet(amount: float) : None
+    -_reset_hand() : None
+}
+
+class Hand {
+    -_cards : List[Card]
+    +__init__() : None
+    -_add_card(card: Card) : None
+    -_calculate_score(target_score: int = 21) : int
+    -_reset() : None
+}
+
+class Bet {
+    -_amount : float
+    +__init__(amount: float) : None
 }
 
 class ConservativeBot {
@@ -26,20 +41,29 @@ class MixedBot {
     +strategy : str = "mixed"
 }
 
+class BalancedBot {
+    +strategy : str = "balanced"
+}
+
+class IntuitiveBot {
+    +strategy : str = "intuitive"
+    +decide(target_score: int = 21) : bool
+}
+
 class Card {
-    -suit : str
-    -rank : int
-    -value : int
+    -_suit : str
+    -_rank : int
+    -_value : int
     +__init__(suit: str, rank: int) : None
     +__repr__() : str
 }
 
 class Deck {
-    -suits : List[str]
-    -ranks : List[int]
-    -cards : List[Card]
+    -_suits : List[str]
+    -_ranks : List[int]
+    -_cards : List[Card]
     +__init__() : None
-    +draw_card() : Optional[Card]
+    -_draw_card() : Optional[Card]
 }
 
 class GameMeta <<metaclass>> {
@@ -47,18 +71,21 @@ class GameMeta <<metaclass>> {
 }
 
 class Game {
-    -deck : Deck
-    -bots : List[Bot]
-    -max_steps : int
-    -current_step : int
-    -output_file : Optional[str]
-    -target_score : int
+    -_deck : Deck
+    -_bots : List[Bot]
+    -_max_steps : int
+    -_current_step : int
+    -_output_file : Optional[str]
     +__init__(bots: List[Bot], max_steps: int = 10, output_file: Optional[str] = None, target_score: Optional[int] = None) : None
-    +log(message: str) : None
-    +show_state() : None
-    +play_round() : None
-    +determine_winner() : Optional[Bot]
-    +play_game() : None
+    -_log(message: str) : None
+    -_show_initial_state() : None
+    -_show_final_state(winner: Optional[Bot] = None, total_winnings: Optional[int] = None) : None
+    -_show_state() : None
+    -_play_round() : None
+    -determine_winner() : Optional[Bot]
+    -_distribute_pot(winner: Bot) : None
+    -_play_game() : None
+    +target_score : int
 }
 
 object main {
@@ -69,14 +96,20 @@ BotMeta <|.. Bot
 Bot <|-- ConservativeBot
 Bot <|-- AggressiveBot
 Bot <|-- MixedBot
+Bot <|-- BalancedBot
+Bot <|-- IntuitiveBot
 Deck --> Card
+Bot --> Hand
+Bot --> Bet
 GameMeta <|.. Game
-Game --> Deck
-Game --> Bot
+Game *-- Deck
+Game *-- Bot : "creates"
 
 main ..> ConservativeBot : "creates"
 main ..> AggressiveBot : "creates"
 main ..> MixedBot : "creates"
+main ..> BalancedBot : "creates"
+main ..> IntuitiveBot : "creates"
 main ..> Game : "creates"
 
 @enduml

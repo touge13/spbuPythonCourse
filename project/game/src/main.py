@@ -12,10 +12,14 @@ def main(output_file: Optional[str] = None) -> None:
                                                If None, the output will not be saved.
     """
 
-    bots = [ConservativeBot("Bot1"), AggressiveBot("Bot2"), MixedBot("Bot3")]
+    bots = [
+        ConservativeBot("Bot1", 100.0),
+        AggressiveBot("Bot2", 200.0),
+        MixedBot("Bot3", 100.0),
+    ]
 
     game = Game(bots, max_steps=10, output_file=output_file, target_score=21)
-    game.play_game()
+    game._play_game()
 
 
 if __name__ == "__main__":

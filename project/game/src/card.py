@@ -20,9 +20,9 @@ class Card:
             suit (str): The suit of the card.
             rank (int): The rank of the card.
         """
-        self.suit = suit
-        self.rank = rank
-        self.value = min(rank, 10)  # Cards with rank > 10 are valued as 10
+        self._suit = suit
+        self._rank = rank
+        self._value = min(rank, 10)  # Cards with rank > 10 are valued as 10
 
     def __repr__(self) -> str:
         """
@@ -31,7 +31,7 @@ class Card:
         Returns:
             str: A string in the format "<rank> of <suit>".
         """
-        return f"{self.rank} of {self.suit}"
+        return f"{self._rank} of {self._suit}"
 
 
 class Deck:
@@ -53,16 +53,16 @@ class Deck:
         """
         Initializes a Deck instance, creates a full deck of cards, and shuffles them.
         """
-        self.cards: List[Card] = [
-            Card(suit, rank) for suit in self.suits for rank in self.ranks
+        self._cards: List[Card] = [
+            Card(suit, rank) for suit in Deck.suits for rank in Deck.ranks
         ]
-        random.shuffle(self.cards)
+        random.shuffle(self._cards)
 
-    def draw_card(self) -> Optional[Card]:
+    def _draw_card(self) -> Optional[Card]:
         """
         Draws a card from the deck.
 
         Returns:
             Optional[Card]: The drawn Card, or None if the deck is empty.
         """
-        return self.cards.pop() if self.cards else None
+        return self._cards.pop() if self._cards else None
