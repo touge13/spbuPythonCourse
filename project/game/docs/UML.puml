@@ -88,28 +88,20 @@ class Game {
     +target_score : int
 }
 
-object main {
-    +main(output_file: Optional[str] = None) : None
-}
+BotMeta ..> Bot
+GameMeta ..> Game
+Bot o-- Hand
+Bot o-- Bet
+Hand o-- Card
+Deck o-- Card
+Game *-- Deck
+Game *-- Bot : "creates"
 
-BotMeta <|.. Bot
 Bot <|-- ConservativeBot
 Bot <|-- AggressiveBot
 Bot <|-- MixedBot
 Bot <|-- BalancedBot
 Bot <|-- IntuitiveBot
-Deck --> Card
-Bot --> Hand
-Bot --> Bet
-GameMeta <|.. Game
-Game *-- Deck
-Game *-- Bot : "creates"
-
-main ..> ConservativeBot : "creates"
-main ..> AggressiveBot : "creates"
-main ..> MixedBot : "creates"
-main ..> BalancedBot : "creates"
-main ..> IntuitiveBot : "creates"
-main ..> Game : "creates"
 
 @enduml
+  
