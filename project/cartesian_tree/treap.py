@@ -6,7 +6,7 @@ from collections.abc import MutableMapping
 class TreapNode:
     """
     Represents a node in the Treap structure.
-    
+
     Attributes:
         key: The key of the node, which is an integer.
         value: The value associated with the key.
@@ -14,6 +14,7 @@ class TreapNode:
         left: Left child node.
         right: Right child node.
     """
+
     def __init__(self, key: int, value: Any, priority: Optional[int] = None):
         self.key: int = key
         self.value: Any = value
@@ -31,6 +32,7 @@ class Treap(MutableMapping):
 
     Implements MutableMapping, so it supports dictionary-like operations.
     """
+
     def __init__(self, root: Optional[TreapNode] = None):
         self.root: Optional[TreapNode] = root
 
@@ -38,13 +40,13 @@ class Treap(MutableMapping):
         self, node: Optional[TreapNode], key: int
     ) -> Tuple[Optional[TreapNode], Optional[TreapNode]]:
         """
-        Splits the Treap into two sub-treaps: one with keys smaller than the given key, 
+        Splits the Treap into two sub-treaps: one with keys smaller than the given key,
         and the other with keys greater or equal to the given key.
-        
+
         Args:
             node: The current root node to start splitting.
             key: The key at which to split the tree.
-        
+
         Returns:
             A tuple containing the two resulting sub-trees.
         """
@@ -62,11 +64,11 @@ class Treap(MutableMapping):
     ) -> Optional[TreapNode]:
         """
         Merges two Treaps into one, maintaining the Treap properties.
-        
+
         Args:
             left_node: The root node of the first sub-tree.
             right_node: The root node of the second sub-tree.
-        
+
         Returns:
             The root node of the merged Treap.
         """
@@ -84,12 +86,12 @@ class Treap(MutableMapping):
     def insert(self, node: Optional[TreapNode], key: int, value: Any) -> TreapNode:
         """
         Inserts a new node into the Treap or updates the value of an existing node.
-        
+
         Args:
             node: The current root node.
             key: The key of the node to insert.
             value: The value associated with the key.
-        
+
         Returns:
             The updated root node of the Treap.
         """
@@ -116,10 +118,10 @@ class Treap(MutableMapping):
     def _size(self, node: Optional[TreapNode]) -> int:
         """
         Calculates the size (number of nodes) in the Treap.
-        
+
         Args:
             node: The node to start counting from.
-        
+
         Returns:
             The number of nodes in the subtree rooted at `node`.
         """
@@ -130,10 +132,10 @@ class Treap(MutableMapping):
     def __contains__(self, key: Any) -> bool:
         """
         Checks if the key exists in the Treap.
-        
+
         Args:
             key: The key to search for.
-        
+
         Returns:
             True if the key exists, False otherwise.
         """
@@ -142,7 +144,7 @@ class Treap(MutableMapping):
     def __setitem__(self, key: int, value: Any) -> None:
         """
         Sets the value for the given key in the Treap.
-        
+
         Args:
             key: The key to insert or update.
             value: The value to associate with the key.
@@ -152,13 +154,13 @@ class Treap(MutableMapping):
     def __getitem__(self, key: int) -> Any:
         """
         Retrieves the value associated with the given key.
-        
+
         Args:
             key: The key whose associated value is to be retrieved.
-        
+
         Returns:
             The value associated with the key.
-        
+
         Raises:
             KeyError: If the key is not found in the Treap.
         """
@@ -170,10 +172,10 @@ class Treap(MutableMapping):
     def __delitem__(self, key: int) -> None:
         """
         Deletes the key-value pair from the Treap.
-        
+
         Args:
             key: The key to delete.
-        
+
         Raises:
             KeyError: If the key is not found.
         """
@@ -182,11 +184,11 @@ class Treap(MutableMapping):
     def _find(self, node: Optional[TreapNode], key: int) -> Any:
         """
         Searches for the key in the Treap and returns its associated value.
-        
+
         Args:
             node: The node to start the search from.
             key: The key to search for.
-        
+
         Returns:
             The value associated with the key, or None if the key is not found.
         """
@@ -202,14 +204,14 @@ class Treap(MutableMapping):
     def _delete(self, node: Optional[TreapNode], key: int) -> Optional[TreapNode]:
         """
         Deletes the node with the given key from the Treap.
-        
+
         Args:
             node: The current root node.
             key: The key to delete.
-        
+
         Returns:
             The updated root node of the Treap after deletion.
-        
+
         Raises:
             KeyError: If the key is not found.
         """
@@ -232,10 +234,10 @@ class Treap(MutableMapping):
     def _inorder_iter(self, node: Optional[TreapNode]) -> Iterator:
         """
         Helper method for inorder traversal (ascending order).
-        
+
         Args:
             node: The node to start the traversal from.
-        
+
         Yields:
             The keys of the Treap in ascending order.
         """
@@ -253,10 +255,10 @@ class Treap(MutableMapping):
     def _reverse_inorder_iter(self, node: Optional[TreapNode]) -> Iterator:
         """
         Helper method for reverse inorder traversal (descending order).
-        
+
         Args:
             node: The node to start the traversal from.
-        
+
         Yields:
             The keys of the Treap in descending order.
         """
@@ -268,10 +270,10 @@ class Treap(MutableMapping):
     def _rotate_right(self, node: TreapNode) -> TreapNode:
         """
         Performs a right rotation on the given node to maintain the Treap's heap property.
-        
+
         Args:
             node: The node to rotate.
-        
+
         Returns:
             The new root of the subtree after the rotation.
         """
@@ -285,10 +287,10 @@ class Treap(MutableMapping):
     def _rotate_left(self, node: TreapNode) -> TreapNode:
         """
         Performs a left rotation on the given node to maintain the Treap's heap property.
-        
+
         Args:
             node: The node to rotate.
-        
+
         Returns:
             The new root of the subtree after the rotation.
         """
