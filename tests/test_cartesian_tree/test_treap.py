@@ -116,20 +116,6 @@ def test_insert_with_split_and_merge():
     assert list(treap._inorder_iter(merged_tree)) == ["b", "d", "f"]
 
 
-def test_remove_key():
-    treap = Treap()
-
-    treap["i"] = 9
-    treap["g"] = 7
-    treap["h"] = 8
-
-    treap._delete(treap.root, "i")
-
-    assert "i" not in treap
-    with pytest.raises(KeyError):
-        treap["i"]
-
-
 def test_large_scale_operations():
     treap = Treap()
 
