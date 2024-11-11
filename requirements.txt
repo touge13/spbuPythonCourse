@@ -3,3 +3,7 @@ mypy
 numpy
 pre-commit
 pytest
+pandas
+seaborn
+matplotlib
+plotly
