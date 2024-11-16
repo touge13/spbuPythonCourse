@@ -7,4 +7,4 @@ plotly
 pre-commit
 pytest
 seaborn
-sklearn
+scikit-learn
