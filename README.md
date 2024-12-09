@@ -5,6 +5,8 @@
 
 Курс "Программирование на Python".
 
+**Оценка за курс студента Грудинина Михаила: A**
+
 Полезные ссылки:
 - [Таблица с текущими результатами](https://docs.google.com/spreadsheets/d/1h29GyiGds4PvkNSZqw_1VYGAAcFNKr0j-YzTJLWTHR4/edit?usp=sharing)
 - [Список задач](https://github.com/Krekep/spbu-python-course/tree/main/tasks)
